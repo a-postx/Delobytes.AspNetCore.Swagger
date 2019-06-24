@@ -4,7 +4,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Revolex.AspNetCore.Swagger
+namespace Delobytes.AspNetCore.Swagger
 {
     /// <summary>
     /// <see cref="SwaggerGenOptions"/>  extension methods.

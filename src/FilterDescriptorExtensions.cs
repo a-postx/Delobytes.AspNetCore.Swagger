@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Revolex.AspNetCore.Swagger
+namespace Delobytes.AspNetCore.Swagger
 {
     internal static class FilterDescriptorExtensions
     {

@@ -7,6 +7,7 @@
     <Authors>Alexey Yakubin</Authors>
     <Company>Delobytes</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

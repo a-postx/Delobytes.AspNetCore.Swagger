@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Revolex.AspNetCore.Swagger.OperationFilters
+namespace Delobytes.AspNetCore.Swagger.OperationFilters
 {
     /// <summary>
     /// Add 401 Unauthorized response to a Swagger documentation response when the authorization policy contains

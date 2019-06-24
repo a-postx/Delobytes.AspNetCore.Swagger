@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Operation = Microsoft.AspNetCore.JsonPatch.Operations.Operation;
 
-namespace Revolex.AspNetCore.Swagger.SchemaFilters
+namespace Delobytes.AspNetCore.Swagger.SchemaFilters
 {
     /// <summary>
     /// Show an example of <see cref="JsonPatchDocument"/> containing all the different patch operations you can do.
