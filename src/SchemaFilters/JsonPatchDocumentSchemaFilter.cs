@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using Operation = Microsoft.AspNetCore.JsonPatch.Operations.Operation;
 
 namespace Delobytes.AspNetCore.Swagger.SchemaFilters
@@ -16,19 +19,24 @@ namespace Delobytes.AspNetCore.Swagger.SchemaFilters
         /// </summary>
         /// <param name="model">Model.</param>
         /// <param name="context">Context.</param>
-        public void Apply(Schema model, SchemaFilterContext context)
+        public void Apply(OpenApiSchema model, SchemaFilterContext context)
         {
-            if (context.SystemType.GenericTypeArguments.Length > 0 &&
-                context.SystemType.GetGenericTypeDefinition() == typeof(JsonPatchDocument<>))
+            if (context.ApiModel.Type.GenericTypeArguments.Length > 0 &&
+                context.ApiModel.Type.GetGenericTypeDefinition() == typeof(JsonPatchDocument<>))
             {
                 Operation[] example = GetExample();
+                bool success = OpenApiAnyFactory.TryCreateFor(model, example, out IOpenApiAny openApiAny);
 
-                model.Default = example;
-                model.Example = example;
-                model.ExternalDocs = new ExternalDocs()
+                if (success)
+                {
+                    model.Default = openApiAny;
+                    model.Example = openApiAny;
+                }                
+
+                model.ExternalDocs = new OpenApiExternalDocs()
                 {
                     Description = "JSON Patch Documentation",
-                    Url = "http://jsonpatch.com/"
+                    Url = new Uri("http://jsonpatch.com/")
                 };
             }
         }

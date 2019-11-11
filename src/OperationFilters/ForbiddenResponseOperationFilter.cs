@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -15,7 +16,7 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters
     public class ForbiddenResponseOperationFilter : IOperationFilter
     {
         private const string ForbiddenStatusCode = "403";
-        private static readonly Response ForbiddenResponse = new Response()
+        private static readonly OpenApiResponse ForbiddenResponse = new OpenApiResponse()
         {
             Description = "Forbidden - The user does not have the necessary permissions to access the resource."
         };
@@ -25,7 +26,7 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters
         /// </summary>
         /// <param name="operation">Operation.</param>
         /// <param name="context">Context.</param>
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var filterDescriptors = context.ApiDescription.ActionDescriptor.FilterDescriptors;
             IList<IAuthorizationRequirement> authorizationRequirements = filterDescriptors.GetPolicyRequirements();

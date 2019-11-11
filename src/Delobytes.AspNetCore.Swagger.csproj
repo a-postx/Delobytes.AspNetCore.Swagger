@@ -4,14 +4,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Description>Middlewares, MVC filters, extension methods and helper code for ASP.NET Core projects with Swagger (OpenAPI).</Description>
-    <Authors>Alexey Yakubin</Authors>
+    <Authors>Alexey Yakubin, Muhammad Rehan Saeed</Authors>
     <Company>Delobytes</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.1</Version>
+    <Version>2.0.0-alpha1</Version>
+    <PackageReleaseNotes>Upgrade on OpenApi 3.0</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
   </ItemGroup>
 
 </Project>
