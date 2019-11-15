@@ -12,27 +12,26 @@ namespace Delobytes.AspNetCore.Swagger
     public static class SwaggerGenOptionsExtensions
     {
         /// <summary>
-        /// Include XML comment file if it has the same name as the assembly, 'xml' file extension and exists in
+        /// Includes the XML comment file if it has the same name as the assembly, a .xml file extension and exists in
         /// the same directory as the assembly.
         /// </summary>
-        /// <param name="options">Swagger options.</param>
-        /// <param name="assembly">Assembly.</param>
+        /// <param name="options">The Swagger options.</param>
+        /// <param name="assembly">The assembly.</param>
         /// <returns><c>true</c> if the comment file exists and was added, otherwise <c>false</c>.</returns>
         /// <exception cref="System.ArgumentNullException">options or assembly.</exception>
         public static SwaggerGenOptions IncludeXmlCommentsIfExists(this SwaggerGenOptions options, Assembly assembly)
         {
-            if (options == null)
+            if (options is null)
             {
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if (assembly == null)
+            if (assembly is null)
             {
                 throw new ArgumentNullException(nameof(assembly));
             }
 
-            string filePath = Path.ChangeExtension(assembly.Location, ".xml");
-
+            var filePath = Path.ChangeExtension(assembly.Location, ".xml");
             if (!IncludeXmlCommentsIfExists(options, filePath) && (assembly.CodeBase != null))
             {
                 filePath = Path.ChangeExtension(new Uri(assembly.CodeBase).AbsolutePath, ".xml");
@@ -43,20 +42,20 @@ namespace Delobytes.AspNetCore.Swagger
         }
 
         /// <summary>
-        /// Include XML comment file if it exists in the specified file path.
+        /// Includes the XML comment file if it exists at the specified file path.
         /// </summary>
-        /// <param name="options">Swagger options.</param>
-        /// <param name="filePath">XML comment file path.</param>
+        /// <param name="options">The Swagger options.</param>
+        /// <param name="filePath">The XML comment file path.</param>
         /// <returns><c>true</c> if the comment file exists and was added, otherwise <c>false</c>.</returns>
         /// <exception cref="System.ArgumentNullException">options or filePath.</exception>
         public static bool IncludeXmlCommentsIfExists(this SwaggerGenOptions options, string filePath)
         {
-            if (options == null)
+            if (options is null)
             {
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if (filePath == null)
+            if (filePath is null)
             {
                 throw new ArgumentNullException(nameof(filePath));
             }
@@ -64,7 +63,6 @@ namespace Delobytes.AspNetCore.Swagger
             if (File.Exists(filePath))
             {
                 options.IncludeXmlComments(filePath);
-
                 return true;
             }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using Operation = Microsoft.AspNetCore.JsonPatch.Operations.Operation;
@@ -9,90 +8,95 @@ using Operation = Microsoft.AspNetCore.JsonPatch.Operations.Operation;
 namespace Delobytes.AspNetCore.Swagger.SchemaFilters
 {
     /// <summary>
-    /// Show an example of <see cref="JsonPatchDocument"/> containing all the different patch operations you can do.
+    /// Shows an example of a <see cref="JsonPatchDocument"/> containing all the different patch operations you can do
+    /// and a link to http://jsonpatch.com for convenience.
     /// </summary>
     /// <seealso cref="ISchemaFilter" />
     public class JsonPatchDocumentSchemaFilter : ISchemaFilter
     {
-        /// <summary>
-        /// Apply the specified model.
-        /// </summary>
-        /// <param name="model">Model.</param>
-        /// <param name="context">Context.</param>
-        public void Apply(OpenApiSchema model, SchemaFilterContext context)
+        private static readonly OpenApiArray Example = new OpenApiArray()
         {
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("replace"),
+                [nameof(Operation.path)] = new OpenApiString("/property"),
+                [nameof(Operation.value)] = new OpenApiString("New Value"),
+            },
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("add"),
+                [nameof(Operation.path)] = new OpenApiString("/property"),
+                [nameof(Operation.value)] = new OpenApiString("New Value"),
+            },
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("remove"),
+                [nameof(Operation.path)] = new OpenApiString("/property"),
+            },
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("copy"),
+                [nameof(Operation.from)] = new OpenApiString("/fromProperty"),
+                [nameof(Operation.path)] = new OpenApiString("/property"),
+            },
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("move"),
+                [nameof(Operation.from)] = new OpenApiString("/fromProperty"),
+                [nameof(Operation.path)] = new OpenApiString("/property"),
+            },
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("test"),
+                [nameof(Operation.path)] = new OpenApiString("/property"),
+                [nameof(Operation.value)] = new OpenApiString("Has Value"),
+            },
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("test"),
+                [nameof(Operation.path)] = new OpenApiString("/property"),
+                [nameof(Operation.value)] = new OpenApiString("Has Value"),
+            },
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("replace"),
+                [nameof(Operation.path)] = new OpenApiString("/arrayProperty/0"),
+                [nameof(Operation.value)] = new OpenApiString("Replace First Array Item"),
+            },
+            new OpenApiObject()
+            {
+                [nameof(Operation.op)] = new OpenApiString("replace"),
+                [nameof(Operation.path)] = new OpenApiString("/arrayProperty/-"),
+                [nameof(Operation.value)] = new OpenApiString("Replace Last Array Item"),
+            },
+        };
+
+        private static readonly OpenApiExternalDocs ExternalDocs = new OpenApiExternalDocs()
+        {
+            Description = "JSON Patch Documentation",
+            Url = new Uri("http://jsonpatch.com/", UriKind.Absolute),
+        };
+
+        /// <inheritdoc/>
+        public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+        {
+            if (schema is null)
+            {
+                throw new ArgumentNullException(nameof(schema));
+            }
+
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (context.ApiModel.Type.GenericTypeArguments.Length > 0 &&
                 context.ApiModel.Type.GetGenericTypeDefinition() == typeof(JsonPatchDocument<>))
             {
-                Operation[] example = GetExample();
-                bool success = OpenApiAnyFactory.TryCreateFor(model, example, out IOpenApiAny openApiAny);
-
-                if (success)
-                {
-                    model.Default = openApiAny;
-                    model.Example = openApiAny;
-                }                
-
-                model.ExternalDocs = new OpenApiExternalDocs()
-                {
-                    Description = "JSON Patch Documentation",
-                    Url = new Uri("http://jsonpatch.com/")
-                };
+                schema.Default = Example;
+                schema.Example = Example;
+                schema.ExternalDocs = ExternalDocs;
             }
-        }
-
-        private static Operation[] GetExample()
-        {
-            return new Operation[]
-            {
-                new Operation()
-                {
-                    op = "replace",
-                    path = "/property",
-                    value = "New Value"
-                },
-                new Operation()
-                {
-                    op = "add",
-                    path = "/property",
-                    value = "New Value"
-                },
-                new Operation()
-                {
-                    op = "remove",
-                    path = "/property"
-                },
-                new Operation()
-                {
-                    op = "copy",
-                    @from = "/fromProperty",
-                    path = "/toProperty"
-                },
-                new Operation()
-                {
-                    op = "move",
-                    @from = "/fromProperty",
-                    path = "/toProperty"
-                },
-                new Operation()
-                {
-                    op = "test",
-                    path = "/property",
-                    value = "Has Value"
-                },
-                new Operation()
-                {
-                    op = "replace",
-                    path = "/arrayProperty/0",
-                    value = "Replace First Array Item"
-                },
-                new Operation()
-                {
-                    op = "replace",
-                    path = "/arrayProperty/-",
-                    value = "Replace Last Array Item"
-                }
-            };
         }
     }
 }

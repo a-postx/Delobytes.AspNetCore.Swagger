@@ -7,9 +7,17 @@
     <Authors>Alexey Yakubin, Muhammad Rehan Saeed</Authors>
     <Company>Delobytes</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>2.0.0-alpha1</Version>
+    <Version>2.0.0</Version>
     <PackageReleaseNotes>Upgrade on OpenApi 3.0</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="OperationFilters\CorellationIdOperationFilter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="OperationFilters\CorellationIdOperationFilter.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
