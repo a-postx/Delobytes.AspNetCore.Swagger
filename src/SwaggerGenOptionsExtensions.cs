@@ -7,18 +7,18 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Delobytes.AspNetCore.Swagger
 {
     /// <summary>
-    /// <see cref="SwaggerGenOptions"/>  extension methods.
+    /// Методы расширения <see cref="SwaggerGenOptions"/>.
     /// </summary>
     public static class SwaggerGenOptionsExtensions
     {
         /// <summary>
-        /// Includes the XML comment file if it has the same name as the assembly, a .xml file extension and exists in
-        /// the same directory as the assembly.
+        /// Добавить файл с XML-комментариями, если он называется именем библиотеки, имеет расширение .xml
+        /// и существует в той же папке, что и библиотека.
         /// </summary>
-        /// <param name="options">The Swagger options.</param>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns><c>true</c> if the comment file exists and was added, otherwise <c>false</c>.</returns>
-        /// <exception cref="System.ArgumentNullException">options or assembly.</exception>
+        /// <param name="options">Настройки свагера.</param>
+        /// <param name="assembly">Библиотека.</param>
+        /// <returns><c>true</c> если файл комментариев существует и был добавлен, иначе <c>false</c>.</returns>
+        /// <exception cref="System.ArgumentNullException">Настройки или путь не предоставлены.</exception>
         public static SwaggerGenOptions IncludeXmlCommentsIfExists(this SwaggerGenOptions options, Assembly assembly)
         {
             if (options is null)
@@ -42,12 +42,12 @@ namespace Delobytes.AspNetCore.Swagger
         }
 
         /// <summary>
-        /// Includes the XML comment file if it exists at the specified file path.
+        /// Включает файл с XML-комментариями, если он существует по указанному пути.
         /// </summary>
-        /// <param name="options">The Swagger options.</param>
-        /// <param name="filePath">The XML comment file path.</param>
-        /// <returns><c>true</c> if the comment file exists and was added, otherwise <c>false</c>.</returns>
-        /// <exception cref="System.ArgumentNullException">options or filePath.</exception>
+        /// <param name="options">Настройки свагера.</param>
+        /// <param name="filePath">Путь к файлу с XML-комментариями.</param>
+        /// <returns><c>true</c> если файл комментариев существует и был добавлен, иначе <c>false</c>.</returns>
+        /// <exception cref="System.ArgumentNullException">Настройки или путь не предоставлены.</exception>
         public static bool IncludeXmlCommentsIfExists(this SwaggerGenOptions options, string filePath)
         {
             if (options is null)

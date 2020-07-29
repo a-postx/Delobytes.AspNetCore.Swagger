@@ -8,20 +8,18 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Delobytes.AspNetCore.Swagger.OperationFilters
 {
     /// <summary>
-    /// Adds claims from any authorization policy's <see cref="ClaimsAuthorizationRequirement"/>'s.
+    /// Добавляет удостоверения из любых требований политики авторизации <see cref="ClaimsAuthorizationRequirement"/>.
+    /// Принимаются параметры: securitySchemeReferenceId [= "oauth2"]
     /// </summary>
     /// <seealso cref="IOperationFilter" />
     public class ClaimsOperationFilter : IOperationFilter
     {
-        private const string OAuth2OpenApiReferenceId = "oauth2";
-        private static readonly OpenApiSecurityScheme OAuth2OpenApiSecurityScheme = new OpenApiSecurityScheme()
+        public ClaimsOperationFilter(string securitySchemeReferenceId = "oauth2")
         {
-            Reference = new OpenApiReference()
-            {
-                Id = OAuth2OpenApiReferenceId,
-                Type = ReferenceType.SecurityScheme,
-            },
-        };
+            _referenceId = securitySchemeReferenceId;
+        }
+
+        private readonly string _referenceId;
 
         /// <inheritdoc/>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -49,7 +47,15 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters
                 {
                     new OpenApiSecurityRequirement()
                     {
-                        { OAuth2OpenApiSecurityScheme, claimTypes },
+                        {
+                            new OpenApiSecurityScheme() {
+                                Reference = new OpenApiReference()
+                                {
+                                    Id = _referenceId,
+                                    Type = ReferenceType.SecurityScheme,
+                                },
+                            }
+                            , claimTypes },
                     },
                 };
             }

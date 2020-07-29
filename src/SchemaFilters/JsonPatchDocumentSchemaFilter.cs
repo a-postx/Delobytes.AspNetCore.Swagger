@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
-using Operation = Microsoft.AspNetCore.JsonPatch.Operations.Operation;
 
 namespace Delobytes.AspNetCore.Swagger.SchemaFilters
 {
     /// <summary>
-    /// Shows an example of a <see cref="JsonPatchDocument"/> containing all the different patch operations you can do
-    /// and a link to http://jsonpatch.com for convenience.
+    /// Добавляет пример <see cref="OpenApiExample"/>, содержащий доступные операции модификации
+    /// <see cref="JsonPatchDocument"/> и ссылку на http://jsonpatch.com.
     /// </summary>
     /// <seealso cref="ISchemaFilter" />
     public class JsonPatchDocumentSchemaFilter : ISchemaFilter

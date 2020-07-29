@@ -7,51 +7,45 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Delobytes.AspNetCore.Swagger.OperationFilters
 {
     /// <summary>
-    /// Adds an Open API <see cref="OpenApiParameter"/> to all operations with a description of the X-Correlation-ID
-    /// HTTP header and a default GUID value.
+    /// Добавляет заголовочный <see cref="OpenApiParameter"/> коррелляции для всех операций
+    /// со значением по-умолчанию в виде случайного гуида.
+    /// Принимаются параметры: parameterName [= "X-Correlation-ID"]
     /// </summary>
     /// <seealso cref="IOperationFilter" />
     public class CorrelationIdOperationFilter : IOperationFilter
     {
-        /// <inheritdoc/>
+        public CorrelationIdOperationFilter(string parameterName = "X-Correlation-ID")
+        {
+            _parameterName = parameterName;
+        }
+
+        private readonly string _parameterName;
+
+        /// <summary>
+        /// Применить указанную операцию.
+        /// </summary>
+        /// <param name="operation">Операция.</param>
+        /// <param name="context">Контекст.</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (operation is null)
-            {
-                throw new ArgumentNullException(nameof(operation));
-            }
-
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
             if (operation.Parameters is null)
             {
                 operation.Parameters = new List<OpenApiParameter>();
             }
 
-            operation.Parameters.Add(this.GetCorrelationIdParameter());
-        }
-
-        /// <summary>
-        /// Gets the Open API parameter for the X-Correlation-ID HTTP header.
-        /// </summary>
-        /// <returns>The Open API parameter for the X-Correlation-ID HTTP header.</returns>
-        protected virtual OpenApiParameter GetCorrelationIdParameter()
-        {
-            return new OpenApiParameter()
-            {
-                Description = "Used to uniquely identify the HTTP request. This ID is used to correlate the HTTP request between a client and server.",
-                In = ParameterLocation.Header,
-                Name = "X-Correlation-ID",
-                Required = false,
-                Schema = new OpenApiSchema()
+            operation.Parameters.Add(
+                new OpenApiParameter()
                 {
-                    Default = new OpenApiString(Guid.NewGuid().ToString()),
-                    Type = "string",
-                },
-            };
+                    Description = "Создаёт контекст корелляции: ИД объединяет HTTP-запрос между сервером и клиентом.",
+                    In = ParameterLocation.Header,
+                    Name = _parameterName,
+                    Required = true,
+                    Schema = new OpenApiSchema
+                    {
+                        Default = new OpenApiString(Guid.NewGuid().ToString()),
+                        Type = "string",
+                    },
+                });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.OpenApi.Models;
@@ -7,9 +8,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Delobytes.AspNetCore.Swagger.OperationFilters
 {
     /// <summary>
-    /// Adds a 403 Forbidden response to the Swagger response documentation when the authorization policy contains a
-    /// <see cref="ClaimsAuthorizationRequirement"/>, <see cref="NameAuthorizationRequirement"/>,
-    /// <see cref="OperationAuthorizationRequirement"/>, <see cref="RolesAuthorizationRequirement"/> or
+    /// Добавляет ответ 403 Запрещено в ответы для операций, которые атрибутированы
+    /// политикой <see cref="ClaimsAuthorizationRequirement"/>, <see cref="NameAuthorizationRequirement"/>,
+    /// <see cref="OperationAuthorizationRequirement"/>, <see cref="RolesAuthorizationRequirement"/> или
     /// <see cref="AssertionRequirement"/>.
     /// </summary>
     /// <seealso cref="IOperationFilter" />
@@ -18,16 +19,22 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters
         private const string ForbiddenStatusCode = "403";
         private static readonly OpenApiResponse ForbiddenResponse = new OpenApiResponse()
         {
-            Description = "Forbidden - The user does not have the necessary permissions to access the resource."
+            Description = "Запрещено - Пользователь не имеет необходимых прав для доступа к ресурсу."
         };
 
-        /// <summary>
-        /// Apply the specified operation.
-        /// </summary>
-        /// <param name="operation">Operation.</param>
-        /// <param name="context">Context.</param>
+        /// <inheritdoc/>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
+            if (operation is null)
+            {
+                throw new ArgumentNullException(nameof(operation));
+            }
+
+            if (context is null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             var filterDescriptors = context.ApiDescription.ActionDescriptor.FilterDescriptors;
             IList<IAuthorizationRequirement> authorizationRequirements = filterDescriptors.GetPolicyRequirements();
             if (!operation.Responses.ContainsKey(ForbiddenStatusCode) &&

@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace Delobytes.AspNetCore.Swagger.SchemaFilters
 {
     /// <summary>
-    /// Shows an example of a <see cref="ProblemDetails"/> containing errors.
+    /// Добавляет примеры <see cref="ProblemDetails"/> для популярных кодов ошибок.
     /// </summary>
     /// <seealso cref="ISchemaFilter" />
     internal class ProblemDetailsSchemaFilter : ISchemaFilter
