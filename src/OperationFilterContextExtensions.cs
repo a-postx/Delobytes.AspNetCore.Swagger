@@ -14,6 +14,7 @@ namespace Delobytes.AspNetCore.Swagger
 
             List<T> result = new List<T>(controllerAttributes);
             result.AddRange(actionAttributes);
+
             return result;
         }
     }
