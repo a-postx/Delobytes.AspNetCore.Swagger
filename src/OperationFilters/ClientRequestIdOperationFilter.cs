@@ -36,7 +36,7 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters
             operation.Parameters.Add(
                 new OpenApiParameter()
                 {
-                    Description = "Идентификатор клиентского запроса, объединяет HTTP-запрос между сервером и клиентом.",
+                    Description = "Идентификатор клиентского запроса, используется для контроля идемпотентности.",
                     In = ParameterLocation.Header,
                     Name = _parameterName,
                     Required = true,
