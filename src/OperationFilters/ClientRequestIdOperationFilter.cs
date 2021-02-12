@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -28,6 +31,17 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters
         /// <param name="context">Контекст.</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
+            IEnumerable<ServiceFilterAttribute> attributes = GetControllerAndActionAttributes<ServiceFilterAttribute>(context);
+            IEnumerable<ServiceFilterAttribute> idempotencyAttributes = attributes
+                .Where(e => e.ServiceType.Name == "IdempotencyFilterAttribute");
+
+            bool shouldBeIdempotent = idempotencyAttributes.Any();
+
+            if (!shouldBeIdempotent)
+            {
+                return;
+            }
+
             if (operation.Parameters is null)
             {
                 operation.Parameters = new List<OpenApiParameter>();
@@ -46,6 +60,16 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters
                         Type = "string",
                     },
                 });
+        }
+
+        private static IEnumerable<T> GetControllerAndActionAttributes<T>(OperationFilterContext context) where T : Attribute
+        {
+            IEnumerable<T> controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();
+            IEnumerable<T> actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
+            List<T> result = new List<T>(controllerAttributes);
+            result.AddRange(actionAttributes);
+
+            return result;
         }
     }
 }
