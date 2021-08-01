@@ -7,8 +7,8 @@
     <Authors>Alexey Yakubin, Muhammad Rehan Saeed</Authors>
     <Company>Delobytes</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>4.1.1</Version>
-    <AssemblyVersion>4.1.1.0</AssemblyVersion>
+    <Version>5.0.0</Version>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <OutputType>Library</OutputType>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/a-postx/Delobytes.AspNetCore.Swagger.git</RepositoryUrl>
