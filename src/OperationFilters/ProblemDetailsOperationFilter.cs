@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Any;
@@ -144,7 +145,7 @@ public class ProblemDetailsOperationFilter : IOperationFilter
         ArgumentNullException.ThrowIfNull(operation);
         ArgumentNullException.ThrowIfNull(context);
 
-        foreach (var keyValuePair in operation.Responses)
+        foreach (KeyValuePair<string, OpenApiResponse> keyValuePair in operation.Responses)
         {
             switch (keyValuePair.Key)
             {
@@ -181,18 +182,18 @@ public class ProblemDetailsOperationFilter : IOperationFilter
         }
     }
 
-    private static void SetDefaultAndExample(OpenApiResponse value, OpenApiObject status500ProblemDetails)
+    private static void SetDefaultAndExample(OpenApiResponse value, OpenApiObject statusProblemDetails)
     {
         if (value.Content is not null)
         {
-            if (value.Content.TryGetValue(ContentType.ProblemJson, out var problemJsonMediaType))
+            if (value.Content.TryGetValue(ContentType.ProblemJson, out OpenApiMediaType problemJsonMediaType))
             {
-                problemJsonMediaType.Example = status500ProblemDetails;
+                problemJsonMediaType.Example = statusProblemDetails;
             }
 
-            if (value.Content.TryGetValue(ContentType.ProblemXml, out var problemXmlMediaType))
+            if (value.Content.TryGetValue(ContentType.ProblemXml, out OpenApiMediaType problemXmlMediaType))
             {
-                problemXmlMediaType.Example = status500ProblemDetails;
+                problemXmlMediaType.Example = statusProblemDetails;
             }
         }
     }
