@@ -4,41 +4,40 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Delobytes.AspNetCore.Swagger.OperationFilters
+namespace Delobytes.AspNetCore.Swagger.OperationFilters;
+
+/// <summary>
+/// Добавляет ответ 401 Неавторизован в ответы для операций, которые атрибутированы
+/// политикой <see cref="DenyAnonymousAuthorizationRequirement"/>.
+/// </summary>
+/// <seealso cref="IOperationFilter" />
+public class UnauthorizedResponseOperationFilter : IOperationFilter
 {
-    /// <summary>
-    /// Добавляет ответ 401 Неавторизован в ответы для операций, которые атрибутированы
-    /// политикой <see cref="DenyAnonymousAuthorizationRequirement"/>.
-    /// </summary>
-    /// <seealso cref="IOperationFilter" />
-    public class UnauthorizedResponseOperationFilter : IOperationFilter
+    private const string UnauthorizedStatusCode = "401";
+    private static readonly OpenApiResponse UnauthorizedResponse = new OpenApiResponse()
     {
-        private const string UnauthorizedStatusCode = "401";
-        private static readonly OpenApiResponse UnauthorizedResponse = new OpenApiResponse()
+        Description = "Не Авторизован - Пользователь не предоставил необходимых учётных данных для доступа к ресурсу."
+    };
+
+    /// <inheritdoc/>
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    {
+        if (operation is null)
         {
-            Description = "Не Авторизован - Пользователь не предоставил необходимых учётных данных для доступа к ресурсу."
-        };
+            throw new ArgumentNullException(nameof(operation));
+        }
 
-        /// <inheritdoc/>
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        if (context is null)
         {
-            if (operation is null)
-            {
-                throw new ArgumentNullException(nameof(operation));
-            }
+            throw new ArgumentNullException(nameof(context));
+        }
 
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var filterDescriptors = context.ApiDescription.ActionDescriptor.FilterDescriptors;
-            var authorizationRequirements = filterDescriptors.GetPolicyRequirements();
-            if (!operation.Responses.ContainsKey(UnauthorizedStatusCode) &&
-                authorizationRequirements.OfType<DenyAnonymousAuthorizationRequirement>().Any())
-            {
-                operation.Responses.Add(UnauthorizedStatusCode, UnauthorizedResponse);
-            }
+        var filterDescriptors = context.ApiDescription.ActionDescriptor.FilterDescriptors;
+        var authorizationRequirements = filterDescriptors.GetPolicyRequirements();
+        if (!operation.Responses.ContainsKey(UnauthorizedStatusCode) &&
+            authorizationRequirements.OfType<DenyAnonymousAuthorizationRequirement>().Any())
+        {
+            operation.Responses.Add(UnauthorizedStatusCode, UnauthorizedResponse);
         }
     }
 }

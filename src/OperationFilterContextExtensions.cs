@@ -3,19 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Delobytes.AspNetCore.Swagger
+namespace Delobytes.AspNetCore.Swagger;
+
+internal static class OperationFilterContextExtensions
 {
-    internal static class OperationFilterContextExtensions
+    public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context) where T : Attribute
     {
-        public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context) where T : Attribute
-        {
-            IEnumerable<T> controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();
-            IEnumerable<T> actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
+        IEnumerable<T> controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();
+        IEnumerable<T> actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
 
-            List<T> result = new List<T>(controllerAttributes);
-            result.AddRange(actionAttributes);
+        List<T> result = new List<T>(controllerAttributes);
+        result.AddRange(actionAttributes);
 
-            return result;
-        }
+        return result;
     }
 }

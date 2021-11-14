@@ -5,60 +5,59 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Delobytes.AspNetCore.Swagger.OperationFilters
+namespace Delobytes.AspNetCore.Swagger.OperationFilters;
+
+/// <summary>
+/// Добавляет удостоверения из любых требований политики авторизации <see cref="ClaimsAuthorizationRequirement"/>.
+/// Принимаются параметры: securitySchemeReferenceId [= "oauth2"]
+/// </summary>
+/// <seealso cref="IOperationFilter" />
+public class ClaimsOperationFilter : IOperationFilter
 {
-    /// <summary>
-    /// Добавляет удостоверения из любых требований политики авторизации <see cref="ClaimsAuthorizationRequirement"/>.
-    /// Принимаются параметры: securitySchemeReferenceId [= "oauth2"]
-    /// </summary>
-    /// <seealso cref="IOperationFilter" />
-    public class ClaimsOperationFilter : IOperationFilter
+    public ClaimsOperationFilter(string securitySchemeReferenceId = "oauth2")
     {
-        public ClaimsOperationFilter(string securitySchemeReferenceId = "oauth2")
+        _referenceId = securitySchemeReferenceId;
+    }
+
+    private readonly string _referenceId;
+
+    /// <inheritdoc/>
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    {
+        if (operation is null)
         {
-            _referenceId = securitySchemeReferenceId;
+            throw new ArgumentNullException(nameof(operation));
         }
 
-        private readonly string _referenceId;
-
-        /// <inheritdoc/>
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        if (context is null)
         {
-            if (operation is null)
-            {
-                throw new ArgumentNullException(nameof(operation));
-            }
+            throw new ArgumentNullException(nameof(context));
+        }
 
-            if (context is null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+        var filterDescriptors = context.ApiDescription.ActionDescriptor.FilterDescriptors;
+        var authorizationRequirements = filterDescriptors.GetPolicyRequirements();
+        var claimTypes = authorizationRequirements
+            .OfType<ClaimsAuthorizationRequirement>()
+            .Select(x => x.ClaimType)
+            .ToList();
 
-            var filterDescriptors = context.ApiDescription.ActionDescriptor.FilterDescriptors;
-            var authorizationRequirements = filterDescriptors.GetPolicyRequirements();
-            var claimTypes = authorizationRequirements
-                .OfType<ClaimsAuthorizationRequirement>()
-                .Select(x => x.ClaimType)
-                .ToList();
-
-            if (claimTypes.Any())
+        if (claimTypes.Any())
+        {
+            operation.Security = new List<OpenApiSecurityRequirement>()
             {
-                operation.Security = new List<OpenApiSecurityRequirement>()
+                new OpenApiSecurityRequirement()
                 {
-                    new OpenApiSecurityRequirement()
                     {
-                        {
-                            new OpenApiSecurityScheme() {
-                                Reference = new OpenApiReference()
-                                {
-                                    Id = _referenceId,
-                                    Type = ReferenceType.SecurityScheme,
-                                },
-                            }
-                            , claimTypes },
-                    },
-                };
-            }
+                        new OpenApiSecurityScheme() {
+                            Reference = new OpenApiReference()
+                            {
+                                Id = _referenceId,
+                                Type = ReferenceType.SecurityScheme,
+                            },
+                        }
+                        , claimTypes },
+                },
+            };
         }
     }
 }
