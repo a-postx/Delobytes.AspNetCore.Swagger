@@ -9,7 +9,14 @@ internal static class OperationFilterContextExtensions
 {
     public static IEnumerable<T> GetControllerAndActionAttributes<T>(this OperationFilterContext context) where T : Attribute
     {
-        IEnumerable<T> controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();
+        Type? type = context.MethodInfo.DeclaringType;
+
+        if (type == null)
+        {
+            throw new InvalidOperationException("Unknown type");
+        }
+
+        IEnumerable<T> controllerAttributes = type.GetTypeInfo().GetCustomAttributes<T>();
         IEnumerable<T> actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
 
         List<T> result = new List<T>(controllerAttributes);

@@ -30,7 +30,7 @@ public class SecurityRequirementsOperationFilter : IOperationFilter
         string unauthorizedResponseDescription = "Не авторизован - Пользователь не предоставил необходимых учётных данных для доступа к ресурсу.",
         string forbiddenResponseDescription = "Запрещено - Пользователь не имеет необходимых прав для доступа к ресурсу.")
     {
-        Func<IEnumerable<AuthorizeAttribute>, IEnumerable<string>> policySelector = authAttributes =>
+        Func<IEnumerable<AuthorizeAttribute>, IEnumerable<string?>> policySelector = authAttributes =>
             authAttributes
                 .Where(a => !string.IsNullOrEmpty(a.Policy))
                 .Select(a => a.Policy);

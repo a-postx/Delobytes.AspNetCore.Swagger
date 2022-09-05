@@ -186,12 +186,12 @@ public class ProblemDetailsOperationFilter : IOperationFilter
     {
         if (value.Content is not null)
         {
-            if (value.Content.TryGetValue(ContentType.ProblemJson, out OpenApiMediaType problemJsonMediaType))
+            if (value.Content.TryGetValue(ContentType.ProblemJson, out OpenApiMediaType? problemJsonMediaType))
             {
                 problemJsonMediaType.Example = statusProblemDetails;
             }
 
-            if (value.Content.TryGetValue(ContentType.ProblemXml, out OpenApiMediaType problemXmlMediaType))
+            if (value.Content.TryGetValue(ContentType.ProblemXml, out OpenApiMediaType? problemXmlMediaType))
             {
                 problemXmlMediaType.Example = statusProblemDetails;
             }

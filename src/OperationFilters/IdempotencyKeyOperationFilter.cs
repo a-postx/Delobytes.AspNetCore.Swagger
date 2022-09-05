@@ -17,6 +17,10 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters;
 /// <seealso cref="IOperationFilter" />
 public class IdempotencyKeyOperationFilter : IOperationFilter
 {
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="parameterName">Имя параметра.</param>
     public IdempotencyKeyOperationFilter(string parameterName = "Idempotency-Key")
     {
         _parameterName = parameterName;
@@ -24,14 +28,10 @@ public class IdempotencyKeyOperationFilter : IOperationFilter
 
     private readonly string _parameterName;
 
-    /// <summary>
-    /// Применить указанную операцию.
-    /// </summary>
-    /// <param name="operation">Операция.</param>
-    /// <param name="context">Контекст.</param>
+    /// <inheritdoc/>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        IEnumerable<ServiceFilterAttribute> attributes = GetControllerAndActionAttributes<ServiceFilterAttribute>(context);
+        IEnumerable<ServiceFilterAttribute> attributes = context.GetControllerAndActionAttributes<ServiceFilterAttribute>();
         IEnumerable<ServiceFilterAttribute> idempotencyAttributes = attributes
             .Where(e => e.ServiceType.Name == "IdempotencyFilterAttribute");
 
@@ -60,15 +60,5 @@ public class IdempotencyKeyOperationFilter : IOperationFilter
                     Type = "string",
                 },
             });
-    }
-
-    private static IEnumerable<T> GetControllerAndActionAttributes<T>(OperationFilterContext context) where T : Attribute
-    {
-        IEnumerable<T> controllerAttributes = context.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<T>();
-        IEnumerable<T> actionAttributes = context.MethodInfo.GetCustomAttributes<T>();
-        List<T> result = new List<T>(controllerAttributes);
-        result.AddRange(actionAttributes);
-
-        return result;
     }
 }

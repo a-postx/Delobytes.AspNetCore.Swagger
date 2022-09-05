@@ -14,6 +14,10 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters;
 /// <seealso cref="IOperationFilter" />
 public class ClaimsOperationFilter : IOperationFilter
 {
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="securitySchemeReferenceId">Идентификатор схемы безопасности.</param>
     public ClaimsOperationFilter(string securitySchemeReferenceId = "oauth2")
     {
         _referenceId = securitySchemeReferenceId;

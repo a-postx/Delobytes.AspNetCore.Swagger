@@ -14,6 +14,10 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters;
 /// <seealso cref="IOperationFilter" />
 public class CorrelationIdOperationFilter : IOperationFilter
 {
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="parameterName">Имя параметра.</param>
     public CorrelationIdOperationFilter(string parameterName = "X-Correlation-ID")
     {
         _parameterName = parameterName;
@@ -21,11 +25,7 @@ public class CorrelationIdOperationFilter : IOperationFilter
 
     private readonly string _parameterName;
 
-    /// <summary>
-    /// Применить указанную операцию.
-    /// </summary>
-    /// <param name="operation">Операция.</param>
-    /// <param name="context">Контекст.</param>
+    /// <inheritdoc/>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         if (operation.Parameters is null)

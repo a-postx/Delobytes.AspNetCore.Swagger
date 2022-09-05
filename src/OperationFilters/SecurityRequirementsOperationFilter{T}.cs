@@ -7,6 +7,10 @@ using System.Linq;
 
 namespace Delobytes.AspNetCore.Swagger.OperationFilters;
 
+/// <summary>
+/// Фильтр требований к безопасности.
+/// </summary>
+/// <typeparam name="T">Тип</typeparam>
 public class SecurityRequirementsOperationFilter<T> : IOperationFilter where T : Attribute
 {
     /// <summary>
@@ -18,7 +22,7 @@ public class SecurityRequirementsOperationFilter<T> : IOperationFilter where T :
     /// <param name="securitySchemaName">Имя схемы безопасности. Значение по-умолчанию <c>"oauth2"</c></param>
     /// <param name="unauthorizedResponseDescription">Описание ответа на ошибку 401</param>
     /// <param name="forbiddenResponseDescription">Описание ответа на ошибку 403</param>
-    public SecurityRequirementsOperationFilter(Func<IEnumerable<T>, IEnumerable<string>> policySelector,
+    public SecurityRequirementsOperationFilter(Func<IEnumerable<T>, IEnumerable<string?>> policySelector,
         bool includeUnauthorizedAndForbiddenResponses = true,
         string securitySchemaName = "oauth2",
         string unauthorizedResponseDescription = "Не авторизован - Пользователь не предоставил необходимых учётных данных для доступа к ресурсу.",
@@ -31,16 +35,17 @@ public class SecurityRequirementsOperationFilter<T> : IOperationFilter where T :
         _forbiddenResponse = new OpenApiResponse { Description = forbiddenResponseDescription };
     }
 
-    private readonly Func<IEnumerable<T>, IEnumerable<string>> _policySelector;
+    private readonly Func<IEnumerable<T>, IEnumerable<string?>> _policySelector;
     private readonly bool _includeUnauthorizedAndForbiddenResponses;
     private readonly string _securitySchemaName;
 
     private const string UnauthorizedStatusCode = "401";
     private const string ForbiddenStatusCode = "403";
 
-    private static OpenApiResponse _unauthorizedResponse;
-    private static OpenApiResponse _forbiddenResponse;
+    private OpenApiResponse _unauthorizedResponse;
+    private OpenApiResponse _forbiddenResponse;
 
+    /// <inheritdoc/>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
@@ -68,7 +73,7 @@ public class SecurityRequirementsOperationFilter<T> : IOperationFilter where T :
             }
         }
 
-        IEnumerable<string> policies = _policySelector(actionAttributes) ?? Enumerable.Empty<string>();
+        IEnumerable<string?> policies = _policySelector(actionAttributes) ?? Enumerable.Empty<string>();
 
         operation.Security.Add(new OpenApiSecurityRequirement
         {

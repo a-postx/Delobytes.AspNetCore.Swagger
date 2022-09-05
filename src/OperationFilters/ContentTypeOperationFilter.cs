@@ -14,6 +14,12 @@ namespace Delobytes.AspNetCore.Swagger.OperationFilters;
 /// <seealso cref="IOperationFilter" />
 public class ContentTypeOperationFilter : IOperationFilter
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="required"></param>
+    /// <param name="contentType"></param>
+    /// <param name="responseDescription"></param>
     public ContentTypeOperationFilter(bool required = false,
         string contentType = "application/json",
         string responseDescription = "Используется для правильной обработки клиентского запроса (напр. POST).")
