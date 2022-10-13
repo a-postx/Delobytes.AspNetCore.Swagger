@@ -6,8 +6,9 @@
     <Description>Middlewares, MVC filters, extension methods and helper code for ASP.NET Core projects with Swagger (OpenAPI).</Description>
     <Authors>Alexey Yakubin, Muhammad Rehan Saeed</Authors>
     <Company>Delobytes</Company>
+	<PackageProjectUrl>https://github.com/a-postx/Delobytes.AspNetCore.Swagger</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>6.2.0-alpha1</Version>
+    <Version>6.2.0-alpha2</Version>
     <OutputType>Library</OutputType>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/a-postx/Delobytes.AspNetCore.Swagger.git</RepositoryUrl>
