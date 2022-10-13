@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Abstractions;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -48,18 +50,54 @@ public class SecurityRequirementsOperationFilter<T> : IOperationFilter where T :
     /// <inheritdoc/>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
+        if (context.ApiDescription.ActionDescriptor as ControllerActionDescriptor != null) // mvc
+        {
+            if (context.GetControllerAndActionAttributes<AllowAnonymousAttribute>().Any())
+            {
+                return;
+            }
+
+            IEnumerable<T> actionAttributes = context.GetControllerAndActionAttributes<T>();
+
+            if (!actionAttributes.Any())
+            {
+                return;
+            }
+
+            AddDescription(operation, actionAttributes);
+        }
+        else if (context.ApiDescription.ActionDescriptor as ActionDescriptor != null) //mini api
+        {
+            IList<object> endpointMetadata = context.ApiDescription.ActionDescriptor.EndpointMetadata;
+
+            IEnumerable<AllowAnonymousAttribute> anonymousMetadataAttributes = endpointMetadata
+                                      .Where(a => a as AllowAnonymousAttribute != null)
+                                      .Select(a => (AllowAnonymousAttribute)a);
+
+            if (anonymousMetadataAttributes.Any())
+            {
+                return;
+            }
+
+            IEnumerable<T> metadataAttributes = endpointMetadata
+                                      .Where(a => a as T != null)
+                                      .Select(a => (T)a);
+
+            if (!metadataAttributes.Any())
+            {
+                return;
+            }
+
+            AddDescription(operation, metadataAttributes);
+        }
+        else
         {
             return;
         }
+    }
 
-        IEnumerable<T> actionAttributes = context.GetControllerAndActionAttributes<T>();
-
-        if (!actionAttributes.Any())
-        {
-            return;
-        }
-
+    private void AddDescription(OpenApiOperation operation, IEnumerable<T> attributes)
+    {
         if (_includeUnauthorizedAndForbiddenResponses)
         {
             if (!operation.Responses.ContainsKey(UnauthorizedStatusCode))
@@ -73,16 +111,16 @@ public class SecurityRequirementsOperationFilter<T> : IOperationFilter where T :
             }
         }
 
-        IEnumerable<string?> policies = _policySelector(actionAttributes) ?? Enumerable.Empty<string>();
+        IEnumerable<string?> policies = _policySelector(attributes) ?? Enumerable.Empty<string>();
 
         operation.Security.Add(new OpenApiSecurityRequirement
-        {
             {
-                new OpenApiSecurityScheme {
-                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = _securitySchemaName }
-                },
-                policies.ToList()
-            }
-        });
+                {
+                    new OpenApiSecurityScheme {
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = _securitySchemaName }
+                    },
+                    policies.ToList()
+                }
+            });
     }
 }
