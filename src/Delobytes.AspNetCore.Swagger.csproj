@@ -8,7 +8,7 @@
     <Company>Delobytes</Company>
 	<PackageProjectUrl>https://github.com/a-postx/Delobytes.AspNetCore.Swagger</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>6.2.0-alpha2</Version>
+    <Version>7.0.0-alpha1</Version>
     <OutputType>Library</OutputType>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/a-postx/Delobytes.AspNetCore.Swagger.git</RepositoryUrl>
@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Delobytes.AspNetCore" Version="5.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.0" />
+    <PackageReference Include="JsonPatch" Version="2.0.0-alpha" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.0" />
   </ItemGroup>
 

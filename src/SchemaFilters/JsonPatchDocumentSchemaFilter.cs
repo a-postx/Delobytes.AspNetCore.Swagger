@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
+﻿using JsonPatchCore;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -8,67 +7,66 @@ using System;
 namespace Delobytes.AspNetCore.Swagger.SchemaFilters;
 
 /// <summary>
-/// Добавляет пример <see cref="OpenApiExample"/>, содержащий доступные операции модификации
-/// <see cref="JsonPatchDocument"/> и ссылку на http://jsonpatch.com.
+/// Добавляет пример <see cref="OpenApiExample"/>, содержащий доступные операции модификации и ссылку на http://jsonpatch.com.
 /// </summary>
 /// <seealso cref="ISchemaFilter" />
 public class JsonPatchDocumentSchemaFilter : ISchemaFilter
 {
     private static readonly OpenApiArray Example = new OpenApiArray()
     {
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("replace"),
-            [nameof(Operation.path)] = new OpenApiString("/property"),
-            [nameof(Operation.value)] = new OpenApiString("New Value"),
-        },
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("add"),
-            [nameof(Operation.path)] = new OpenApiString("/property"),
-            [nameof(Operation.value)] = new OpenApiString("New Value"),
-        },
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("remove"),
-            [nameof(Operation.path)] = new OpenApiString("/property"),
-        },
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("copy"),
-            [nameof(Operation.from)] = new OpenApiString("/fromProperty"),
-            [nameof(Operation.path)] = new OpenApiString("/property"),
-        },
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("move"),
-            [nameof(Operation.from)] = new OpenApiString("/fromProperty"),
-            [nameof(Operation.path)] = new OpenApiString("/property"),
-        },
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("test"),
-            [nameof(Operation.path)] = new OpenApiString("/property"),
-            [nameof(Operation.value)] = new OpenApiString("Has Value"),
-        },
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("test"),
-            [nameof(Operation.path)] = new OpenApiString("/property"),
-            [nameof(Operation.value)] = new OpenApiString("Has Value"),
-        },
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("replace"),
-            [nameof(Operation.path)] = new OpenApiString("/arrayProperty/0"),
-            [nameof(Operation.value)] = new OpenApiString("Replace First Array Item"),
-        },
-        new OpenApiObject()
-        {
-            [nameof(Operation.op)] = new OpenApiString("replace"),
-            [nameof(Operation.path)] = new OpenApiString("/arrayProperty/-"),
-            [nameof(Operation.value)] = new OpenApiString("Replace Last Array Item"),
-        },
+        new OpenApiObject
+            {
+                ["op"] = new OpenApiString("replace"),
+                ["path"] = new OpenApiString("/property"),
+                ["value"] = new OpenApiString("New Value")
+            },
+            new OpenApiObject
+            {
+                ["op"] = new OpenApiString("add"),
+                ["path"] = new OpenApiString("/property"),
+                ["value"] = new OpenApiString("New Value")
+            },
+            new OpenApiObject
+            {
+                ["op"] = new OpenApiString("remove"),
+                ["path"] = new OpenApiString("/property")
+            },
+            new OpenApiObject
+            {
+                ["op"] = new OpenApiString("copy"),
+                ["from"] = new OpenApiString("/fromProperty"),
+                ["path"] = new OpenApiString("/property")
+            },
+            new OpenApiObject
+            {
+                ["op"] = new OpenApiString("move"),
+                ["from"] = new OpenApiString("/fromProperty"),
+                ["path"] = new OpenApiString("/property")
+            },
+            new OpenApiObject
+            {
+                ["op"] = new OpenApiString("test"),
+                ["path"] = new OpenApiString("/property"),
+                ["value"] = new OpenApiString("Has Value")
+            },
+            new OpenApiObject
+            {
+                ["op"] = new OpenApiString("test"),
+                ["path"] = new OpenApiString("/property"),
+                ["value"] = new OpenApiString("Has Value")
+            },
+            new OpenApiObject
+            {
+                ["op"] = new OpenApiString("replace"),
+                ["path"] = new OpenApiString("/arrayProperty/0"),
+                ["value"] = new OpenApiString("Replace First Array Item")
+            },
+            new OpenApiObject
+            {
+                ["op"] = new OpenApiString("replace"),
+                ["path"] = new OpenApiString("/arrayProperty/-"),
+                ["value"] = new OpenApiString("Replace Last Array Item")
+            }
     };
 
     private static readonly OpenApiExternalDocs ExternalDocs = new OpenApiExternalDocs()
