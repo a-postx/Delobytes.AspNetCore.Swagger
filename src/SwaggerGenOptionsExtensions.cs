@@ -21,15 +21,8 @@ public static class SwaggerGenOptionsExtensions
     /// <exception cref="System.ArgumentNullException">Настройки или путь не предоставлены.</exception>
     public static SwaggerGenOptions IncludeXmlCommentsIfExists(this SwaggerGenOptions options, Assembly assembly)
     {
-        if (options is null)
-        {
-            throw new ArgumentNullException(nameof(options));
-        }
-
-        if (assembly is null)
-        {
-            throw new ArgumentNullException(nameof(assembly));
-        }
+        ArgumentNullException.ThrowIfNull(options, nameof(options));
+        ArgumentNullException.ThrowIfNull(assembly, nameof(assembly));
 
         if (!string.IsNullOrEmpty(assembly.Location))
         {
@@ -49,15 +42,8 @@ public static class SwaggerGenOptionsExtensions
     /// <exception cref="System.ArgumentNullException">Настройки или путь не предоставлены.</exception>
     public static bool IncludeXmlCommentsIfExists(this SwaggerGenOptions options, string filePath)
     {
-        if (options is null)
-        {
-            throw new ArgumentNullException(nameof(options));
-        }
-
-        if (filePath is null)
-        {
-            throw new ArgumentNullException(nameof(filePath));
-        }
+        ArgumentNullException.ThrowIfNull(options, nameof(options));
+        ArgumentNullException.ThrowIfNull(filePath, nameof(filePath));
 
         if (File.Exists(filePath))
         {

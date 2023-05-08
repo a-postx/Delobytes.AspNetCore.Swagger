@@ -7,22 +7,22 @@ using System.Collections.Generic;
 namespace Delobytes.AspNetCore.Swagger.OperationFilters;
 
 /// <summary>
-/// Добавляет <see cref="OpenApiParameter"/> ко всем доступным операциям с поддерживаемым типом содержимого.
+/// Добавляет заголовочный <see cref="OpenApiParameter"/> "Content-Type"
+/// с соответствующим типом содержимого к операции.
 /// Принимаются параметры: required [= false], contentType [= "application/json"],
-/// responseDescription [= "Используется для правильной обработки клиентского запроса (напр. POST)."]
+/// responseDescription [= "Тип содержимого."].
 /// </summary>
 /// <seealso cref="IOperationFilter" />
 public class ContentTypeOperationFilter : IOperationFilter
 {
     /// <summary>
-    /// 
+    /// Конструктор.
     /// </summary>
-    /// <param name="required"></param>
-    /// <param name="contentType"></param>
-    /// <param name="responseDescription"></param>
-    public ContentTypeOperationFilter(bool required = false,
-        string contentType = "application/json",
-        string responseDescription = "Используется для правильной обработки клиентского запроса (напр. POST).")
+    /// <param name="contentType">Тип содержимого.</param>
+    /// <param name="responseDescription">Описание типа содержимого.</param>
+    /// <param name="required">Признак обязательности параметра.</param>
+    public ContentTypeOperationFilter(bool required = false, string contentType = "application/json",
+        string responseDescription = "Тип содержимого.")
     {
         _required = required;
         _contentType = contentType;

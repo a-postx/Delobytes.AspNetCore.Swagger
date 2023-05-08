@@ -25,15 +25,8 @@ public class ForbiddenResponseOperationFilter : IOperationFilter
     /// <inheritdoc/>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        if (operation is null)
-        {
-            throw new ArgumentNullException(nameof(operation));
-        }
-
-        if (context is null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(operation, nameof(operation));
+        ArgumentNullException.ThrowIfNull(context, nameof(context));
 
         var filterDescriptors = context.ApiDescription.ActionDescriptor.FilterDescriptors;
         IList<IAuthorizationRequirement> authorizationRequirements = filterDescriptors.GetPolicyRequirements();

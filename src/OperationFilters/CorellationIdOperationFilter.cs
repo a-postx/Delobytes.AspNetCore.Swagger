@@ -36,7 +36,7 @@ public class CorrelationIdOperationFilter : IOperationFilter
         operation.Parameters.Add(
             new OpenApiParameter()
             {
-                Description = "Создаёт контекст корелляции: ИД объединяет HTTP-запрос между сервером и клиентом.",
+                Description = "Идентификатор корелляции: ИД объединяет HTTP-запрос между сервером и клиентом.",
                 In = ParameterLocation.Header,
                 Name = _parameterName,
                 Required = true,
