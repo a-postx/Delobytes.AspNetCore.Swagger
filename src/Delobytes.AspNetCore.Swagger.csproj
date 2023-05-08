@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Description>Middlewares, MVC filters, extension methods and helper code for ASP.NET Core projects with Swagger (OpenAPI).</Description>
     <Authors>Alexey Yakubin, Muhammad Rehan Saeed</Authors>
     <Company>Delobytes</Company>
 	<PackageProjectUrl>https://github.com/a-postx/Delobytes.AspNetCore.Swagger</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>7.0.0-alpha1</Version>
+    <Version>7.0.0-beta1</Version>
     <OutputType>Library</OutputType>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/a-postx/Delobytes.AspNetCore.Swagger.git</RepositoryUrl>
@@ -17,9 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Delobytes.AspNetCore" Version="5.1.0" />
-    <PackageReference Include="JsonPatch" Version="2.0.0-alpha" />
+    <PackageReference Include="Delobytes.AspNetCore" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.0" />
+    <PackageReference Include="SystemTextJsonPatch" Version="2.0.1" />
   </ItemGroup>
 
 </Project>

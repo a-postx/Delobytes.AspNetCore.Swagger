@@ -1,8 +1,8 @@
-﻿using JsonPatchCore;
-using Microsoft.OpenApi.Any;
+﻿using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using SystemTextJsonPatch;
 
 namespace Delobytes.AspNetCore.Swagger.SchemaFilters;
 
@@ -78,15 +78,8 @@ public class JsonPatchDocumentSchemaFilter : ISchemaFilter
     /// <inheritdoc/>
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {
-        if (schema is null)
-        {
-            throw new ArgumentNullException(nameof(schema));
-        }
-
-        if (context is null)
-        {
-            throw new ArgumentNullException(nameof(context));
-        }
+        ArgumentNullException.ThrowIfNull(schema, nameof(schema));
+        ArgumentNullException.ThrowIfNull(context, nameof(context));
 
         if (context.Type.GenericTypeArguments.Length > 0 &&
             context.Type.GetGenericTypeDefinition() == typeof(JsonPatchDocument<>))

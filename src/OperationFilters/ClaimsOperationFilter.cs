@@ -59,7 +59,8 @@ public class ClaimsOperationFilter : IOperationFilter
                                 Type = ReferenceType.SecurityScheme,
                             },
                         }
-                        , claimTypes },
+                        , claimTypes 
+                    },
                 },
             };
         }
